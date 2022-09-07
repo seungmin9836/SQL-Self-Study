@@ -1,0 +1,29 @@
+-- [문제 1] 없어진 기록 찾기
+-- 천재지변으로 인해 일부 데이터가 유실되었습니다.
+-- 입양을 간 기록은 있는데, 보호소에 들어온 기록이 없는 동물의 ID와 이름을
+-- ID 순으로 조회하는 SQL문을 작성해주세요.
+
+SELECT O.ANIMAL_ID, O.NAME
+FROM ANIMAL_OUTS AS O 
+    LEFT OUTER JOIN ANIMAL_INS AS I
+    ON O.ANIMAL_ID = I.ANIMAL_ID
+WHERE I.ANIMAL_ID IS NULL
+ORDER BY O.ANIMAL_ID ASC;
+
+-- OR --
+
+-- MINUS : 차집합
+SELECT ANIMAL_ID, NAME
+FROM ANIMAL_OUTS -- 기준이 되는 테이블
+MINUS
+SELECT ANIMAL_ID, NAME
+FROM ANIMAL_INS -- 중복이 될 수 있는 테이블
+
+-- OR --
+
+-- ORACLE JOIN 
+SELECT O.ANIMAL_ID, O.NAME
+FROM ANIMAL_OUTS O, ANIMAL_INS I
+WHERE O.ANIMAL_ID = I.ANIMAL_ID(+)
+AND I.ANIMAL_ID IS NULL
+ORDER BY O.ANIMAL_ID
